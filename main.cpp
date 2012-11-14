@@ -17,11 +17,9 @@
 #define HAND_XSCALE 1.6
 #define HAND_YSCALE LEG_YSCALE
 #define HAND_ZSCALE LEG_ZSCALE
-#define MAX_SPEED 100
 #define FOOT_XSCALE 1.0
 #define FOOT_YSCALE 0.3
 #define FOOT_ZSCALE LEG_ZSCALE
-#define GROUND_LENGTH_SCALE 10000
 
 const static double PI = acos(-1.0);
 
@@ -81,24 +79,22 @@ void display(void) {
 
     glColor3f(0.8, 0.8, 0.8);
     // Ground
-    //glPushMatrix();
-    //    glTranslatef(0, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, 0);
-    //    glScalef(GROUND_LENGTH_SCALE, 0.1, GROUND_LENGTH_SCALE);
-    //    glutSolidCube(GLOBAL_SIZE);
-    //glPopMatrix();
-    const static int lineNUM = 2000;
-    const static double lineGap = GROUND_LENGTH_SCALE / lineNUM;
-    //glColor3f(0.0, 0.0, 0.0);
-    for (int i = 0; i < lineNUM; ++ i) {
+    int minx = (int) centerX - 30;
+    int maxx = (int) centerX + 30;
+    int minz = (int) centerZ - 30;
+    int maxz = (int) centerZ + 30;
+    for (int x = minx; x <= maxx; ++ x) {
         glBegin(GL_LINES);
-            glVertex3f(-GROUND_LENGTH_SCALE / 2 + lineGap * i, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, GROUND_LENGTH_SCALE / 2);
-            glVertex3f(-GROUND_LENGTH_SCALE / 2 + lineGap * i, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, -GROUND_LENGTH_SCALE / 2);
+            glVertex3f(x, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, minz);
+            glVertex3f(x, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, maxz);
         glEnd();
-        glBegin(GL_LINES);
-            glVertex3f(-GROUND_LENGTH_SCALE / 2, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, -GROUND_LENGTH_SCALE / 2 + lineGap * i);
-            glVertex3f(GROUND_LENGTH_SCALE / 2, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, -GROUND_LENGTH_SCALE / 2 + lineGap * i);
-        glEnd();
+    }
 
+    for (int z = minz; z <= maxz; ++ z) {
+        glBegin(GL_LINES);
+            glVertex3f(minx, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, z);
+            glVertex3f(maxx, -GLOBAL_SIZE * LEG_XSCALE * 2 - GLOBAL_SIZE * FOOT_YSCALE, z);
+        glEnd();
     }
 
     glPushMatrix();
@@ -120,9 +116,7 @@ void display(void) {
             glPushMatrix();
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * LEG_ZSCALE / 2);
                 gluCylinder(quadratic, GLOBAL_SIZE * LEG_YSCALE / 2, GLOBAL_SIZE * LEG_YSCALE / 2, GLOBAL_SIZE * LEG_ZSCALE, 32, 32);
-            glPopMatrix();
-            glPushMatrix();
-                glTranslatef(0.0, 0.0, GLOBAL_SIZE * LEG_ZSCALE / 2);
+                glTranslatef(0.0, 0.0, GLOBAL_SIZE * LEG_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * LEG_YSCALE / 2);
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * LEG_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * LEG_YSCALE / 2);
@@ -159,9 +153,7 @@ void display(void) {
             glPushMatrix();
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * LEG_ZSCALE / 2);
                 gluCylinder(quadratic, GLOBAL_SIZE * LEG_YSCALE / 2, GLOBAL_SIZE * LEG_YSCALE / 2, GLOBAL_SIZE * LEG_ZSCALE, 32, 32);
-            glPopMatrix();
-            glPushMatrix();
-                glTranslatef(0.0, 0.0, GLOBAL_SIZE * LEG_ZSCALE / 2);
+                glTranslatef(0.0, 0.0, GLOBAL_SIZE * LEG_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * LEG_YSCALE / 2);
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * LEG_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * LEG_YSCALE / 2);
@@ -213,9 +205,7 @@ void display(void) {
             glPushMatrix();
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * HAND_ZSCALE / 2);
                 gluCylinder(quadratic, GLOBAL_SIZE * HAND_YSCALE / 2, GLOBAL_SIZE * HAND_YSCALE / 2, GLOBAL_SIZE * HAND_ZSCALE, 32, 32);
-            glPopMatrix();
-            glPushMatrix();
-                glTranslatef(0.0, 0.0, GLOBAL_SIZE * HAND_ZSCALE / 2);
+                glTranslatef(0.0, 0.0, GLOBAL_SIZE * HAND_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * HAND_YSCALE / 2);
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * HAND_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * HAND_YSCALE / 2);
@@ -243,9 +233,7 @@ void display(void) {
             glPushMatrix();
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * HAND_ZSCALE / 2);
                 gluCylinder(quadratic, GLOBAL_SIZE * HAND_YSCALE / 2, GLOBAL_SIZE * HAND_YSCALE / 2, GLOBAL_SIZE * HAND_ZSCALE, 32, 32);
-            glPopMatrix();
-            glPushMatrix();
-                glTranslatef(0.0, 0.0, GLOBAL_SIZE * HAND_ZSCALE / 2);
+                glTranslatef(0.0, 0.0, GLOBAL_SIZE * HAND_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * HAND_YSCALE / 2);
                 glTranslatef(0.0, 0.0, -GLOBAL_SIZE * HAND_ZSCALE);
                 drawSolidCircle(0.0, 0.0, GLOBAL_SIZE * HAND_YSCALE / 2);
@@ -300,6 +288,9 @@ void keyboard(unsigned char key, int x, int y) {
             break;
         case 27:
             exit(0);
+        case 's':
+            vangle = (vangle + 180) % 360;
+            break;
         default:
             break;
     }
@@ -310,8 +301,8 @@ static const double legLength = 2 * GLOBAL_SIZE * LEG_XSCALE + GLOBAL_SIZE * FOO
 
 void calculateData(int id) {
     centerY = legLength * sin(-leftHigherLegAngle / 180.0 * PI) - legLength;
-    double mvx = cos(vangle / 180.0 * PI) * 0.04;
-    double mvz = sin(vangle / 180.0 * PI) * 0.04;
+    double mvx = cos(vangle / 180.0 * PI) * 0.035;
+    double mvz = sin(vangle / 180.0 * PI) * 0.035;
         //printf("X=%lf Y=%lf Z=%lf\n", centerX, centerY, centerZ);
 
     if (!dir1) {
@@ -352,11 +343,8 @@ void calculateData(int id) {
         leftLowerHandAngle --;
         rightHigherHandAngle ++;
         rightLowerHandAngle ++;
-
     }
 
-    //shoulder = (shoulder - 1) % 90;
-    //elbow = (elbow - 1) % 90;
     centerX -= mvx;
     lookatx -= mvx;
     centerZ += mvz;
